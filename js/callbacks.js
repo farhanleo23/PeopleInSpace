@@ -4,7 +4,7 @@ const peopleList = document.getElementById('people');
 const btn = document.querySelector('button');
 
 // Make an AJAX request
-function getJSON(url, callback {
+function getJSON(url, callback) {
   const xhr = new XMLHttpRequest();
   xhr.open('GET', url);
   xhr.onload = () => {
@@ -30,7 +30,9 @@ function generateHTML(data) {
 
 btn.addEventListener('click', () => {
 
-  getJSON(astrosUrl);
-
-
+  getJSON(astrosUrl, (json) => {
+    json.people.map( person => {
+      getJSON(wikiUrl + person.name, generateHTML);
+    })
+  });
 });
