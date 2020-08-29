@@ -23,27 +23,29 @@ function getJSON(url) {
 
 function getProfiles(json){
   const profiles = json.people.map( person => {
-    return getJSON(wikiUrl + person.name, generateHTML);
+    return getJSON(wikiUrl + person.name);
   });
-  return profiles;
+  return Promise.all(profiles);
 }
 
 // Generate the markup for each profile
 function generateHTML(data) {
-  const section = document.createElement('section');
-  peopleList.appendChild(section);
-  section.innerHTML = `
-    <img src=${data.thumbnail.source}>
-    <h2>${data.title}</h2>
-    <p>${data.description}</p>
-    <p>${data.extract}</p>
+  data.map(person => {
+    const section = document.createElement('section');
+    peopleList.appendChild(section);
+    section.innerHTML = `
+      <img src=${person.thumbnail.source}>
+      <h2>${person.title}</h2>
+      <p>${person.description}</p>
+      <p>${person.extract}</p>
   `;
+  });
 }
 
 btn.addEventListener('click', (event) => {
   getJSON(astrosUrl)
   .then(getProfiles)
-  .then(data => console.log(data))
+  .then(generateHTML)
   .catch(err => console.log(err))
   event.target.remove();
 });
