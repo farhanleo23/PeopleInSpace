@@ -47,6 +47,9 @@ btn.addEventListener('click', (event) => {
   getJSON(astrosUrl)
   .then(getProfiles)
   .then(generateHTML)
-  .catch(err => console.log(err))
+  .catch(err => {
+    peopleList.innerHTML = "<h3>Could not load</h3>";
+    console.log(err);
+  } 
   .finally(()=> event.target.remove())
 });
