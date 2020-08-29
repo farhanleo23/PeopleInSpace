@@ -18,20 +18,6 @@ async function getPeopleInSpace(url){
   return Promise.all(profiles);
 }
 
-
-// function getProfiles(json){
-//   const profiles = json.people.map( person => {
-//     const craft = person.craft;
-//     return fetch(wikiUrl + person.name)
-//             .then( response => response.json())
-//             .then( profile => {
-//               return{...profile, craft}
-//             })
-//             .catch(err => console.log("Error fetching Wikipedia API", err))
-//   });
-//   return Promise.all(profiles);
-// }
-
 // Generate the markup for each profile
 function generateHTML(data) {
   data.map(person => {
@@ -47,21 +33,10 @@ function generateHTML(data) {
   });
 }
 
-btn.addEventListener('click', async (event) => {
+btn.addEventListener('click', (event) => {
   event.target.textContent = "Loading...";
 
-  const astros = await getPeopleInSpace(astrosUrl);
-  generateHTML(astros);
-  event.target.remove();
-
-  //USING FETCH API
-  // fetch(astrosUrl)
-  // .then( response => response.json())
-  // .then(getProfiles)
-  // .then(generateHTML)
-  // .catch(err => {
-  //   peopleList.innerHTML = "<h3>Could not load</h3>";
-  //   console.log(err);
-  // }) 
-  // .finally( () => event.target.remove() )
+  getPeopleInSpace(astrosUrl)
+    .then(generateHTML)
+    .finally( () => event.target.remove())
 });
